@@ -2,8 +2,8 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]  # Cambia a 'master' si tu rama principal se llama así
-  workflow_dispatch:  # Permite ejecutarlo manualmente
+    branches: [ main ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -11,17 +11,31 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Vite Github Pages Deployer
-        uses: skywarth/vite-github-pages-deployer@v1.5.0
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          public_base_path: /vanilla_alpha  # ¡Importante! Nombre de tu repo
-          build_path: ./dist
-          install_phase_node_env: dev
-          build_phase_node_env: production
-          package_manager: npm
-          artifact_name: github-pages
-          debug_mode: false
-          working_path: ./
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
