@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>vanilla_alpha</title>
+    <link rel="stylesheet" href="./src/index.css" />
+    <script type="module" src="/src/vanilla-alpha.js"></script>
+    <style>
+      * {margin:0; padding:0; box-sizing: border-box;}
+      body {  overflow: hidden; background: #222; height: 100vh; width: 100vw; position: relative;}
+
+      #video0{position: absolute;z-index: 3;bottom:0;left:50%;transform:translateX(-50%);}
+      #video1{position: absolute;z-index: 0;width: 100%;height: 100%;}
+      #video2{position: absolute;z-index: 2;right:0;bottom:0;transform:rotate(30deg);}
+      #video3{position: absolute;z-index: 4;left:0;bottom:0;}
+   </style>
+  </head>
+  <body>
+    <vanilla-alpha
+    id="video0"
+      src="./webm_export_packed.mp4"
+      autoplay
+      loop
+      muted
+      playsinline
+    ></vanilla-alpha>
+
+    <vanilla-alpha
+      id="video1"
+      src="./movie-webm_packed.mp4"
+      autoplay
+      loop
+      muted
+      playsinline
+    ></vanilla-alpha>
+
+    <vanilla-alpha
+      id="video2"
+      src="./video_alpha_compo.mp4"
+      autoplay
+      loop
+      muted
+      playsinline
+    ></vanilla-alpha>
+
+    <vanilla-alpha
+      id="video3"
+      src="./orb_VP9_packed.mp4"
+      autoplay
+      loop
+      muted
+      playsinline
+    ></vanilla-alpha>
+
+    <script type="module">
+      const el = document.querySelector('vanilla-alpha');
+
+      // Control por API
+      // el.play(); el.pause(); el.stop(); el.seek(3.5); el.setSrc('...');
+
+      // Escucha de eventos
+      el.addEventListener('va-ready',      () => console.log('GL listo'));
+      el.addEventListener('va-source-loaded', (e) => console.log('metadata', e.detail));
+      el.addEventListener('va-firstframe', () => console.log('primer frame'));
+      el.addEventListener('va-playing',    () => console.log('playing'));
+      el.addEventListener('va-paused',     () => console.log('paused'));
+      el.addEventListener('va-ended',      () => console.log('ended'));
+      el.addEventListener('va-time',       (e) => {
+        const { currentTime, duration, progress } = e.detail;
+        // Aquí tienes el currentTime por eventos:
+        // console.log(currentTime, duration, progress);
+      });
+    </script>
+  </body>
+</html>
